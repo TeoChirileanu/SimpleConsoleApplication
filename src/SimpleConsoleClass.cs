@@ -18,16 +18,15 @@ namespace SimpleConsoleProject
         {
             const string message = "Hello World";
             
-            DeliverToStandardOutput(message);
-            // DeliverToPhoneNumberAsSms(message);
+            await DeliverToStandardOutput(message);
+            await DeliverToPhoneNumberAsSms(message);
             await DeliverToEmailAddress(message);
             // todo: extract class, then classes, then folders, then project, then solution
         }
 
         private static async Task DeliverToEmailAddress(string message)
         {
-            var key = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-            var client = new SendGridClient(key);
+            var client = new SendGridClient("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");
             await client.SendEmailAsync(new SendGridMessage
             {
                 From = new EmailAddress("teodorchirileanu@thecarpathiancoder.dev"),
@@ -37,24 +36,27 @@ namespace SimpleConsoleProject
             });
         }
 
-        private static void DeliverToPhoneNumberAsSms(string message)
+        private static async Task DeliverToPhoneNumberAsSms(string message)
         {
             // todo: put these string in a configuration file e.g. config.net or storage.net
-            var accountSid = Environment.GetEnvironmentVariable("TWILIO_ACCOUNT_SID");
             // todo: update auth token
             var authToken = Environment.GetEnvironmentVariable("TWILIO_AUTH_TOKEN");
-            TwilioClient.Init(accountSid, authToken);
+            TwilioClient.Init("ACa43a7924da320c452114f7592886ea26", "71551eac6dd665468630c555aa192e8b");
 
             var trialNumber = new PhoneNumber("+14243894446");
             var registeredNumber = new PhoneNumber("+33753811986");
 
-            MessageResource.Create(
+            await MessageResource.CreateAsync(
                 body: message,
                 from: trialNumber,
                 to: registeredNumber
             );
         }
 
-        private static void DeliverToStandardOutput(string message) => Console.WriteLine(message);
+        private static async Task DeliverToStandardOutput(string message)
+        {
+            Console.WriteLine(message);
+            await Task.CompletedTask;
+        }
     }
 }
