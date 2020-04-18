@@ -18,7 +18,4 @@ jobs:
     - name: Build
       run: dotnet build
     - name: Run
-      env: 
-        TWILIO_ACCOUNT_SID: ACa43a7924da320c452114f7592886ea26
-        TWILIO_AUTH_TOKEN: 6092be224e53434bc944973404e6f6bb
       run: dotnet run --project src/SimpleConsoleProject.csproj
